@@ -6,14 +6,33 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.example.net.movies.flex.school.notesapp.adapters.NotesRecyclerAdapter;
+import com.example.net.movies.flex.school.notesapp.callbacks.NotesClickListener;
 import com.example.net.movies.flex.school.notesapp.databinding.FragmentFirstBinding;
+import com.example.net.movies.flex.school.notesapp.db.RoomDB;
+import com.example.net.movies.flex.school.notesapp.models.Note;
+import com.google.android.material.card.MaterialCardView;
 
-public class FirstFragment extends Fragment {
+import java.util.List;
+
+public class FirstFragment extends Fragment implements NotesClickListener {
 
     private FragmentFirstBinding binding;
+    private NotesRecyclerAdapter adapter;
+    private List<Note> notes;
+    private RoomDB database;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        database = RoomDB.getInstance(getContext());
+        notes = database.mainDao().getNotes();
+    }
 
     @Override
     public View onCreateView(
@@ -28,14 +47,16 @@ public class FirstFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        updateRecycler();
 
-        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
-            }
-        });
+    }
+
+    private void updateRecycler() {
+        adapter = new NotesRecyclerAdapter(notes, this);
+        binding.notesRecycler.setHasFixedSize(true);
+        binding.notesRecycler.setAdapter(adapter);
+        binding.notesRecycler.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+
     }
 
     @Override
@@ -44,4 +65,20 @@ public class FirstFragment extends Fragment {
         binding = null;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        MainActivity activity = (MainActivity) getActivity();
+        activity.binding.fab.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onClick(Note note) {
+
+    }
+
+    @Override
+    public void onLongClick(Note note, MaterialCardView card) {
+
+    }
 }

@@ -59,6 +59,7 @@
             android:padding="8dp"
             android:scrollHorizontally="true"
             android:text="Dates."
+            android:singleLine="true"
             android:textColor="#242B2E"
             android:textSize="14sp"
             android:textStyle="normal"

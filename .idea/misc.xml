@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/AndroidProjects/NotesApp/app/src/main/res/drawable/input_drawable.xml" value="0.131" />
         <entry key="..\:/AndroidProjects/NotesApp/app/src/main/res/layout/activity_main.xml" value="0.1962962962962963" />
+        <entry key="..\:/AndroidProjects/NotesApp/app/src/main/res/layout/bottom_sheet_note.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/NotesApp/app/src/main/res/layout/fragment_first.xml" value="0.36203703703703705" />
         <entry key="..\:/AndroidProjects/NotesApp/app/src/main/res/layout/fragment_second.xml" value="0.33" />
         <entry key="..\:/AndroidProjects/NotesApp/app/src/main/res/layout/notes_list.xml" value="0.1962962962962963" />

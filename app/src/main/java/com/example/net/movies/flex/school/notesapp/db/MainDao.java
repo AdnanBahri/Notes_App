@@ -11,6 +11,7 @@ import com.example.net.movies.flex.school.notesapp.models.Note;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 
 @Dao
@@ -22,8 +23,8 @@ public interface MainDao {
     Observable<List<Note>> getNotes();
 
     @Query("UPDATE notes SET title = :title, notes = :notes WHERE ID = :id")
-    void update(int id, String title, String notes);
+    Completable update(int id, String title, String notes);
 
     @Delete
-    void delete(Note note);
+    Completable delete(Note note);
 }

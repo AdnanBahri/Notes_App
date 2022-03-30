@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.example.net.movies.flex.school.notesapp.models.Note;
 
-@Database(entities = Note.class, version = 1, exportSchema = false)
+@Database(entities = Note.class, version = 2, exportSchema = false)
 public abstract class RoomDB extends RoomDatabase {
 
     private static RoomDB database;

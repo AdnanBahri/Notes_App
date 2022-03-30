@@ -12,6 +12,7 @@ import com.example.net.movies.flex.school.notesapp.models.Note;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 
 @Dao
@@ -20,11 +21,11 @@ public interface MainDao {
     void insert(Note note);
 
     @Query("SELECT * FROM notes ORDER BY id DESC")
-    Observable<List<Note>> getNotes();
+    Flowable<List<Note>> getNotes();
 
     @Query("UPDATE notes SET title = :title, notes = :notes WHERE ID = :id")
-    Completable update(int id, String title, String notes);
+    void update(int id, String title, String notes);
 
     @Delete
-    Completable delete(Note note);
+    void delete(Note note);
 }

@@ -46,7 +46,7 @@ public class MainViewModel extends AndroidViewModel {
 
     public void deleteNote(Note note) {
         isLoading.postValue(true);
-        Completable.fromAction(() -> database.mainDao().insert(note)).subscribeOn(Schedulers.io())
+        Completable.fromAction(() -> database.mainDao().delete(note)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CompletableObserver() {
                     @Override

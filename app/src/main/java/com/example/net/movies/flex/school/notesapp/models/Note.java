@@ -1,5 +1,7 @@
 package com.example.net.movies.flex.school.notesapp.models;
 
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

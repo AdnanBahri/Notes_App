@@ -1,35 +1,34 @@
 package com.example.net.movies.flex.school.notesapp.views;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.net.movies.flex.school.notesapp.R;
 import com.example.net.movies.flex.school.notesapp.databinding.FragmentSecondBinding;
 import com.example.net.movies.flex.school.notesapp.models.Note;
-import com.example.net.movies.flex.school.notesapp.utils.Constants;
 import com.example.net.movies.flex.school.notesapp.viewmodels.MainViewModel;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class SecondFragment extends Fragment {
 
     private FragmentSecondBinding binding;
     private NavController controller;
     private MainViewModel viewModel;
+    private Note note;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        note = (Note) getArguments().getSerializable("note");
+    }
 
     @Override
     public View onCreateView(
@@ -37,7 +36,8 @@ public class SecondFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         binding = FragmentSecondBinding.inflate(inflater, container, false);
-        setHasOptionsMenu(true);
+        binding.title.setText(note.getTitle());
+        binding.notes.setText(note.getNotes());
 
         return binding.getRoot();
     }
@@ -46,6 +46,8 @@ public class SecondFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         controller = Navigation.findNavController(view);
+        binding.save.setOnClickListener(v -> Toast.makeText(getContext(), "" + note.getTitle(), Toast.LENGTH_SHORT).show());
+        binding.back.setOnClickListener(v -> controller.popBackStack());
     }
 
     @Override
@@ -54,21 +56,7 @@ public class SecondFragment extends Fragment {
         binding = null;
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.save_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        super.onOptionsItemSelected(item);
-        if (item.getItemId() == R.id.save)
-            saveNote();
-        return true;
-    }
-
-    private void saveNote() {
+    /*private void saveNote() {
         String title = binding.title.getText().toString();
         String notes = binding.notes.getText().toString();
         Note note = new Note();
@@ -89,5 +77,5 @@ public class SecondFragment extends Fragment {
                         }
                     }
                 });
-    }
+    }*/
 }

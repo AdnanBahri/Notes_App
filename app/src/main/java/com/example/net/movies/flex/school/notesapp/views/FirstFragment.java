@@ -1,5 +1,6 @@
 package com.example.net.movies.flex.school.notesapp.views;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,15 +12,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.net.movies.flex.school.notesapp.MainActivity;
+import com.example.net.movies.flex.school.notesapp.R;
 import com.example.net.movies.flex.school.notesapp.adapters.NotesRecyclerAdapter;
 import com.example.net.movies.flex.school.notesapp.callbacks.NotesClickListener;
 import com.example.net.movies.flex.school.notesapp.callbacks.UpdateClickListener;
 import com.example.net.movies.flex.school.notesapp.databinding.FragmentFirstBinding;
-import com.example.net.movies.flex.school.notesapp.modals.UpdateNoteDialog;
 import com.example.net.movies.flex.school.notesapp.models.Note;
 import com.example.net.movies.flex.school.notesapp.viewmodels.MainViewModel;
 import com.google.android.material.card.MaterialCardView;
@@ -36,6 +39,7 @@ public class FirstFragment extends Fragment implements NotesClickListener, Updat
     private FragmentFirstBinding binding;
     private NotesRecyclerAdapter adapter;
     private MainViewModel viewModel;
+    private NavController controller;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +71,9 @@ public class FirstFragment extends Fragment implements NotesClickListener, Updat
                     adapter.notifyDataSetChanged();
                 });
         updateRecycler();
+        controller = Navigation.findNavController(view);
+        // Todo : add search functionality
+        binding.search.setOnClickListener(v -> Toast.makeText(getContext(), "Search", Toast.LENGTH_SHORT).show());
     }
 
     private void updateRecycler() {
@@ -94,37 +101,24 @@ public class FirstFragment extends Fragment implements NotesClickListener, Updat
 
     @Override
     public void onClick(Note note) {
-        //Todo : Add  Progress Bar
-        /*Toast.makeText(getContext(), "" + note.getTitle(), Toast.LENGTH_SHORT).show();
-        BottomSheetDialog dialog = new BottomSheetDialog(getContext());
-        dialog.setContentView(R.layout.bottom_sheet_note);
-        TextView title = dialog.findViewById(R.id.text_title);
-        TextView notes = dialog.findViewById(R.id.text_notes);
-        MaterialButton cancel = dialog.findViewById(R.id.btn_cancel);
-        MaterialButton update = dialog.findViewById(R.id.btn_update);
-
-        title.setText(note.getTitle());
-        notes.setText(note.getNotes());
-
-        cancel.setOnClickListener(v -> dialog.cancel());
-        update.setOnClickListener(v -> {
-            Note newNote = new Note();
-            String text_title = title.getText().toString();
-            String text_notes = notes.getText().toString();
-            SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy HH:mm a");
-            Date date = new Date();
-            newNote.setDate(formatter.format(date));
-
-        });
-        dialog.show();*/
-        UpdateNoteDialog dialog = new UpdateNoteDialog(this::onUpdateClick, note);
-        dialog.show(getActivity().getSupportFragmentManager(), "Create Update Dialog");
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("note", note);
+        controller.navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
     }
 
     @Override
     public void onLongClick(Note note, MaterialCardView card) {
         //Todo : Add Alert Dialog and Progress Bar
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Confirm Deleting this note")
+                .setPositiveButton("Delete", (dialog, id) -> {
+                    viewModel.deleteNote(note);
+                    dialog.dismiss();
+                })
+                .setNegativeButton("Cancel", (dialog, id) -> {
+                    dialog.dismiss();
+                });
+        builder.create().show();
     }
 
     @Override
@@ -135,6 +129,8 @@ public class FirstFragment extends Fragment implements NotesClickListener, Updat
 
     @Override
     public void onUpdateClick(Note note) {
+        //Todo : Add  Progress Bar
         Toast.makeText(getContext(), "Update " + note.getTitle() + " Working fine", Toast.LENGTH_SHORT).show();
+        controller.navigate(R.id.action_FirstFragment_to_SecondFragment);
     }
 }
